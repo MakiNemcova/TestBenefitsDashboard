@@ -167,7 +167,7 @@ This may lead to inconsistencies between the documented contract and actual API 
 
 **Steps to Reproduce:**
 1. Request {
-  "firstName": "Lucia",
+  "firstName": "123,
   "lastName": "Novak",
   "dependants": 7,
   "age": 37
