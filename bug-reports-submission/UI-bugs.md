@@ -1,7 +1,5 @@
 # UI Bug Reports
 
-## Test Environment
-
 ## UI Bug: User can access dashboard via browser back button after logout
 
 **Page/Component:** Authentication / Paylocity Benefits Dashboard
