@@ -2,13 +2,6 @@
 
 ## Test Environment
 
-**Environment:** https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod
-**URL:** https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/Account/LogIn
-**Browser:** Google Chrome (Version: 146.0.7680.155)
-**Operating System:** MacOS 
-**Build/Version:** Not available
-**Auth State:** Authenticated user (TestUser933)
-
 ## UI Bug: User can access dashboard via browser back button after logout
 
 **Page/Component:** Authentication / Paylocity Benefits Dashboard
