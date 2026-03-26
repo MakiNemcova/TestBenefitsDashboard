@@ -146,6 +146,47 @@ The user can access the “Add Employee” page and interact with the form witho
 
 ---
 
+## UI Bug: Session does not expire on UI after inactivity
+
+**Page/Component:**  Authentication / Paylocity Benefits Dashboard
+
+**Description:** 
+The UI session does not expire after a period of inactivity. Even after extended idle time (tested up to 60 minutes), the application remains accessible without requiring re-authentication.
+
+The user can still interact with the UI (e.g., open “Add Employee” form and submit data), but backend actions are not completed. The UI does not reflect that the session is no longer valid, which creates confusion and potential security concerns.
+
+**Steps to Reproduce:**
+!. Log in to the application
+2. Open Paylocity Benefits Dashboard
+Leave the application idle (no interaction) for:
+15 minutes
+30 minutes
+45 minutes
+60 minutes
+3. After idle time, try:
+Clicking “Add Employee”
+Filling out the form
+Submitting the form
+
+**Expected Result:** 
+Session should expire after a defined inactivity timeout.
+User should be:
+redirected to Login page OR
+shown a “Session expired” / “Unauthorized” message
+Any action after session expiration should be blocked
+UI should clearly reflect logged-out state
+
+**Actual Result:** 
+UI session does not expire even after 60 minutes of inactivity.
+User can still navigate and interact with the application.
+Forms (e.g., Add Employee) can be opened and submitted.
+No feedback is shown to indicate expired session.
+Backend actions are not completed, but UI does not communicate failure.
+
+**Severity:** Medium
+
+---
+
 ## UI Bug: Long Ids are wrapped across multiple lines, reducing readability
 
 **Page/Component:** Paylocity Benefits Dashboard
@@ -168,50 +209,47 @@ Ids are wrapped onto multiple lines
 
 ---
 
-## UI Bug: No confirmation message displayed after deleting an employee
 
-**Page/Component:** Paylocity Benefits Dashboard / Delete Action
-**Description:** After deleting an employee, no confirmation message or feedback is shown to the user. This makes it unclear whether the action was successful.
 
-**Steps to Reproduce:**
-1. Open Paylocity Benefits Dashboard
-2. Click on Actions "x" for some employee
-3. Delete this employee
+## UI Bug: Missing user feedback and validation messages across Employee actions
 
-**Expected Result:** 
-A confirmation message (e.g., “Employee was successfully deleted”) should be displayed after the deletion.
+**Page/Component:** Paylocity Benefits Dashboard / Add Employee / Update Employee / Delete Employee
 
-**Actual Result:** 
-No confirmation or feedback is shown after deleting an employee.
-
-**Severity:** Low
-
-**Screenshots:**
-
----
-
-## UI Bug: Missing validation message for Dependents field when limit is exceeded
-
-**Page/Component:** Paylocity Benefits Dashboard
 **Description:** 
-The UI does not display a validation error when the Dependents value exceeds the allowed limit (32), even though the API returns an appropriate error message.
+The UI does not display validation, error, or success messages for employee actions. This affects multiple scenarios, including invalid form input, update actions, and delete actions. As a result, users do not receive clear feedback about whether an action succeeded, failed, or why it was rejected.
+
+This issue is not limited to the Dependents field. It appears to be a broader UX/UI problem affecting several workflows:
+
+Form validation errors are not shown:
+API/business rule errors are not surfaced to the user
+Successful actions do not display confirmation messages
+Failed actions do not display error messages
 
 **Steps to Reproduce:**
 1. Open Paylocity Benefits Dashboard
-2. Add new Employee with Dependents = 33
-3. Click to "Add"
+2. Try one of the following scenarios:
+Add a new employee with invalid data (e.g. Dependents = 33, invalid First Name / Last Name) Add lower limit for Dependents. Suggestion: consider a lower limit than 32, if it makes business sense.
+Update an employee with invalid or unsupported values.
+Delete an employee.
 
 **Expected Result:** 
-Add error message if limit is exceeded. ( "The field Dependants must be between 0 and 32.")
-Add lower limit for Dependents. Suggestion: consider a lower limit than 32, if it makes business sense.
+The application should display clear and contextual feedback messages, for example:
 
-**Actual Result:** 
-The current limit for Dependents is too high.
-No error message.
+Validation errors near the affected fields:
+API/business rule error messages after failed submission
+Success confirmation after completed actions
+Delete confirmation message after successful deletion
+Update confirmation message after successful update
 
-**Severity:** Low
+Examples:
 
-**Screenshots:** vidence/screenshots/UI/UIBug5.png
+“The field Dependents must be between 0 and 32.”
+“First Name contains invalid characters.”
+“Employee was successfully updated.”
+“Employee was successfully deleted.”
+“Your session has expired.” / “You are not authorized to perform this action.” where relevant
+
+**Severity:** Medium
 
 ---
 
@@ -315,9 +353,6 @@ Next Pay = 1942.31
 
 ---
 
-
-
-
 ## UI Bug/Improvement: Employees are not sorted alphabetically in the table
 
 **Page/Component:** Paylocity Benefits Dashboard
@@ -341,12 +376,7 @@ First and last names have no filtering options.
 
 ---
 
-
-
-
-
-
-## UI Bug/Improvement 11: Delete confirmation dialog does not uniquely identify the employee
+## UI Bug/Improvement: Delete confirmation dialog does not uniquely identify the employee
 
 **Page/Component:** Paylocity Benefits Dashboard
 **Description:** For clarification, The delete confirmation dialog only displays the employee's name (e.g., "Adam Novak") without any unique identifier such as ID. Since names are not guaranteed to be unique, this may lead to accidental deletion of the wrong record.

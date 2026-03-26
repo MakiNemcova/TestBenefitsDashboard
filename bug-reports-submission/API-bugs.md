@@ -130,8 +130,6 @@ minLength: 0
 
 ---
 
-
-
 ## API Bug: GET /api/Employees/{id} returns 200 with empty body after employee deletion
 
 **Endpoint:** 
@@ -158,3 +156,46 @@ empty response body
 
 **Screenshots:** evidence/screenshots/API/APIBug5.png
 
+## API Bug: Mismatch between OpenAPI specification and actual API behavior
+
+**Endpoint:** POST/api/Employees
+**Description:** 
+It appears that the API behavior is not fully aligned with the OpenAPI schema for the Employee object.
+Requests that include undefined properties are accepted and processed successfully, even though the schema specifies additionalProperties: false.
+
+This may lead to inconsistencies between the documented contract and actual API behavior, making it harder for clients to rely on the schema.
+
+**Steps to Reproduce:**
+1. Request {
+  "firstName": "Lucia",
+  "lastName": "Novak",
+  "dependants": 7,
+  "age": 37
+}
+2. Response {
+    "partitionKey": "TestUser933",
+    "sortKey": "5a5144f4-8083-4c3e-aa04-204a9125be20",
+    "username": "TestUser933",
+    "id": "5a5144f4-8083-4c3e-aa04-204a9125be20",
+    "firstName": "123",
+    "lastName": "Novak",
+    "dependants": 7,
+    "salary": 52000,
+    "gross": 2000,
+    "benefitsCost": 173.07693,
+    "net": 1826.9231
+}
+
+**Expected Result:** 
+Request should be rejected (e.g. 400 Bad Request), because:
+
+Age is not defined in schema (additionalProperties: false)
+
+**Actual Result:**
+200 OK
+Employee is successfully created
+Age is silently ignored
+
+**Severity:** Medium
+
+**Screenshots:** evidence/screenshots/APIBug6.png
